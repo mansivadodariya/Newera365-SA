@@ -146,7 +146,7 @@ function Footer({
 
             {/* Social icons — Flaticon Uicons brand glyphs; conditional on CMS data */}
             {socialLinks && Object.values(socialLinks).some(Boolean) && (
-              <div className="mb-8 flex items-center gap-4 xl:mb-0">
+              <div className="mb-6 flex items-center gap-4">
                 {[
                   { key: 'facebook', href: socialLinks.facebook, icon: 'fi-brands-facebook' },
                   { key: 'x', href: socialLinks.x, icon: 'fi-brands-twitter-alt' },
@@ -169,6 +169,57 @@ function Footer({
                       <i className={`fi ${s.icon} text-[18px] leading-none`} aria-hidden="true" />
                     </a>
                   ))}
+              </div>
+            )}
+
+            {/* Contact details */}
+            {(contact?.email || contact?.phone) && (
+              <div className="mb-8 xl:mb-0">
+                <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                  {t('contactHeading')}
+                </p>
+                <ul className="flex flex-col gap-2 text-[14px]">
+                  {contact?.email && (
+                    <li>
+                      <a
+                        href={`mailto:${contact.email}`}
+                        className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                      >
+                        {contact.email}
+                      </a>
+                    </li>
+                  )}
+                  {contact?.phone && (
+                    <li className="flex items-center gap-2.5">
+                      <span className="flex items-center gap-2">
+                        <a
+                          href={`tel:${contact.phone.replace(/\s+/g, '')}`}
+                          aria-label={t('callAria')}
+                          className="inline-flex text-white/40 transition-colors hover:text-white/80"
+                        >
+                          <PhoneIcon />
+                        </a>
+                        {waDigits && (
+                          <a
+                            href={`https://wa.me/${waDigits}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={t('whatsappAria')}
+                            className="inline-flex text-white/40 transition-colors hover:text-white/80"
+                          >
+                            <WhatsAppIcon />
+                          </a>
+                        )}
+                      </span>
+                      <a
+                        href={`tel:${contact.phone.replace(/\s+/g, '')}`}
+                        className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                      >
+                        {contact.phone}
+                      </a>
+                    </li>
+                  )}
+                </ul>
               </div>
             )}
           </div>
@@ -200,97 +251,32 @@ function Footer({
         {/* Thin divider — full width on desktop */}
         <div className="mb-8 h-px w-full bg-[rgba(255,255,255,0.08)]" />
 
-        {/* Bottom legal zone (client feedback #6) — all CMS-driven. Two balanced
-            columns: the regulatory pair (company registration + risk disclosure)
-            on the left, the practical pair (contact + payment methods) on the
-            right — so neither column leaves the dead space the single long risk
-            block used to. Each block hides when its data is empty; the risk
-            warning always shows. */}
-        {/* Optional regulatory & practical info */}
-        {(regulatoryDisclosure ||
-          contact?.email ||
-          contact?.phone ||
-          contact?.address ||
-          (paymentMethods && paymentMethods.length > 0)) && (
-          <div className="mb-8 grid gap-x-16 gap-y-8 xl:grid-cols-2">
-            {(regulatoryDisclosure || t('regBody')) && (
-              <div>
-                <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-                  {t('regHeading')}
-                </p>
-                <p className="font-body mb-3 hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
-                  {regulatoryDisclosure || t('regBody')}
-                </p>
-              </div>
-            )}
-            {/* Practical: contact details + payment methods */}
-            <div className="flex flex-col gap-6">
-              {(contact?.email || contact?.phone) && (
-                <div>
-                  <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-                    {t('contactHeading')}
-                  </p>
-                  <ul className="flex flex-col gap-2 text-[14px]">
-                    {contact?.email && (
-                      <li>
-                        <a
-                          href={`mailto:${contact.email}`}
-                          className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
-                        >
-                          {contact.email}
-                        </a>
-                      </li>
-                    )}
-                    {contact?.phone && (
-                      <li className="flex items-center gap-2.5">
-                        <span className="flex items-center gap-2">
-                          <a
-                            href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                            aria-label={t('callAria')}
-                            className="inline-flex text-white/40 transition-colors hover:text-white/80"
-                          >
-                            <PhoneIcon />
-                          </a>
-                          {waDigits && (
-                            <a
-                              href={`https://wa.me/${waDigits}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label={t('whatsappAria')}
-                              className="inline-flex text-white/40 transition-colors hover:text-white/80"
-                            >
-                              <WhatsAppIcon />
-                            </a>
-                          )}
-                        </span>
-                        <a
-                          href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                          className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
-                        >
-                          {contact.phone}
-                        </a>
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
-              {paymentMethods && paymentMethods.length > 0 && (
-                <div>
-                  <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-                    {t('paymentsHeading')}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {paymentMethods.map((m) => (
-                      <span
-                        key={m}
-                        className="font-body rounded-md border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[13px] font-normal text-[rgba(255,255,255,0.8)]"
-                      >
-                        {m}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+        {/* Full-width Authorisation & Regulation section */}
+        {(regulatoryDisclosure || t('regBody')) && (
+          <div className="mb-8 w-full">
+            <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+              {t('regHeading')}
+            </p>
+            <p className="font-body w-full hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
+              {regulatoryDisclosure || t('regBody')}
+            </p>
+          </div>
+        )}
+
+        {paymentMethods && paymentMethods.length > 0 && (
+          <div className="mb-8 w-full">
+            <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+              {t('paymentsHeading')}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {paymentMethods.map((m) => (
+                <span
+                  key={m}
+                  className="font-body rounded-md border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[13px] font-normal text-[rgba(255,255,255,0.8)]"
+                >
+                  {m}
+                </span>
+              ))}
             </div>
           </div>
         )}
