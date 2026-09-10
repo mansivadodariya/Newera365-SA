@@ -268,7 +268,7 @@ export default async function LocaleLayout({
                 socialLinks={socialLinks}
                 contact={contact}
                 whatsapp={s?.whatsappNumber || '+18677783511'}
-                paymentMethods={paymentMethods}
+                paymentMethods={[]}
                 regulatoryDisclosure={regulatoryDisclosure}
                 companyRegistration={companyRegistration}
               />

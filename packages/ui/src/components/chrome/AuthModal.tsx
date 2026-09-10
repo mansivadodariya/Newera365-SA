@@ -460,22 +460,14 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
 
               <ul className="flex list-disc flex-col gap-1.5 pl-6 font-medium">
                 {[
-                  { tab: 'terms', label: tLegal('docTerms') },
-                  { tab: 'order-execution', label: tLegal('docOrderExecution') },
                   {
-                    tab: 'client-agreement',
-                    label: tLegal.has('docClientAgreement')
-                      ? tLegal('docClientAgreement')
-                      : 'Client Agreement',
+                    tab: 'complaints-management-framework',
+                    label: 'Complaints Management Framework',
                   },
-                  { tab: 'conflicts-of-interest', label: tLegal('docConflicts') },
-                  { tab: 'privacy-policy', label: tLegal('docPrivacy') },
-                  { tab: 'cookie-policy', label: tLegal('docCookies') },
-                  { tab: 'aml-policy', label: tLegal('docAml') },
-                  { tab: 'anti-fraud-policy', label: tLegal('docAntiFraud') },
-                  { tab: 'complaint-handling', label: tLegal('docComplaintHandling') },
-                  { tab: 'deposit-withdrawal', label: tLegal('docDepositWithdrawal') },
-                  { tab: 'suspicious-activity-reporting', label: tLegal('docSar') },
+                  { tab: 'disaster-recovery-plan', label: 'Disaster Recovery Plan' },
+                  { tab: 'aml-policy', label: 'AML & Sanctions Policy' },
+                  { tab: 'conflicts-of-interest', label: 'Conflict of Interest Policy' },
+                  { tab: 'risk-management-policy', label: 'Risk Management Policy' },
                 ].map((doc) => (
                   <li key={doc.tab}>
                     <a

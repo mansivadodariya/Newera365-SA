@@ -17,17 +17,12 @@ export interface CmsLegalDocument {
 }
 
 const PAGE_TYPE_LABELS: Record<string, string> = {
-  terms: 'Terms & Conditions',
-  'client-agreement': 'Client Agreement',
-  'privacy-policy': 'Privacy Policy',
-  'aml-policy': 'AML Policy',
-  'cookie-policy': 'Cookie Policy',
-  'anti-fraud-policy': 'Anti-Fraud Policy',
-  'conflicts-of-interest': 'Conflicts of Interest',
-  'complaint-handling': 'Complaint Handling',
-  'deposit-withdrawal': 'Deposit & Withdrawal',
-  'order-execution': 'Order Execution',
-  'suspicious-activity-reporting': 'SAR Policy',
+  'complaints-management-framework': 'Complaints Management Framework',
+  'disaster-recovery-plan': 'Disaster Recovery Plan',
+  'aml-policy': 'Anti-Money Laundering & Sanctions Policy',
+  'conflicts-of-interest': 'Conflict of Interest Policy',
+  'risk-management-policy': 'Risk Management Policy',
+  'complaint-handling': 'Complaints Management Framework',
 };
 
 // Deterministic so server and client render identically (no hydration mismatch):
@@ -55,45 +50,28 @@ export function LegalPage({ documents }: LegalPageProps) {
 
   const docLabel = (id: string) => {
     switch (id) {
-      case 'terms':
-        return t('docTerms');
-      case 'client-agreement':
-        return t.has('docClientAgreement') ? t('docClientAgreement') : 'Client Agreement';
-      case 'privacy-policy':
-        return t('docPrivacy');
-      case 'aml-policy':
-        return t('docAml');
-      case 'cookie-policy':
-        return t('docCookies');
-      case 'anti-fraud-policy':
-        return t.has('docAntiFraud') ? t('docAntiFraud') : 'Anti-Fraud Policy';
-      case 'conflicts-of-interest':
-        return t.has('docConflicts') ? t('docConflicts') : 'Conflicts of Interest';
+      case 'complaints-management-framework':
       case 'complaint-handling':
-        return t.has('docComplaintHandling') ? t('docComplaintHandling') : 'Complaint Handling';
-      case 'deposit-withdrawal':
-        return t.has('docDepositWithdrawal') ? t('docDepositWithdrawal') : 'Deposit & Withdrawal';
-      case 'order-execution':
-        return t.has('docOrderExecution') ? t('docOrderExecution') : 'Order Execution';
-      case 'suspicious-activity-reporting':
-        return t.has('docSar') ? t('docSar') : 'SAR Policy';
+        return 'Complaints Management';
+      case 'disaster-recovery-plan':
+        return 'Disaster Recovery';
+      case 'aml-policy':
+        return 'AML & Sanctions';
+      case 'conflicts-of-interest':
+        return 'Conflict of Interest';
+      case 'risk-management-policy':
+        return 'Risk Management';
       default:
-        return id;
+        return PAGE_TYPE_LABELS[id] || id;
     }
   };
 
   const DOC_ORDER: string[] = [
-    'terms',
-    'privacy-policy',
-    'cookie-policy',
+    'complaints-management-framework',
+    'disaster-recovery-plan',
     'aml-policy',
-    'client-agreement',
-    'anti-fraud-policy',
     'conflicts-of-interest',
-    'complaint-handling',
-    'deposit-withdrawal',
-    'order-execution',
-    'suspicious-activity-reporting',
+    'risk-management-policy',
   ];
 
   const uniqueDocs = (documents ?? [])
@@ -236,12 +214,38 @@ export function LegalPage({ documents }: LegalPageProps) {
   const cmsDoc = uniqueDocs.find((d) => d.pageType === activeDoc) ?? null;
   const tocItems = cmsDoc
     ? extractHeadings(cmsDoc.body)
-        .filter((h) => Boolean(h.text && h.text.trim()))
-        .map((h, idx) => ({
-          num: String(idx + 1),
-          title: formatHeadingTitle(h.text),
-          id: h.id,
-        }))
+        .filter((h) => {
+          if (h.level !== 2 || !h.text?.trim()) return false;
+          const text = h.text.trim();
+          if (/^(?:policy\s+background|table\s+of\s+contents|document\s+information)/i.test(text)) {
+            return false;
+          }
+          return /^(?:\d+\.\s+|ANNEX(?:URE|TURE)\s+[A-Z])/i.test(text);
+        })
+        .map((h, idx) => {
+          const rawText = h.text.trim();
+          const numMatch = rawText.match(/^(\d+)\.\s*(.*)$/);
+          if (numMatch) {
+            return {
+              num: numMatch[1],
+              title: numMatch[2],
+              id: h.id,
+            };
+          }
+          const annMatch = rawText.match(/^(ANNEX(?:URE|TURE)\s+[A-Z])(?:\s*[:–-]\s*(.*))?$/i);
+          if (annMatch) {
+            return {
+              num: '',
+              title: annMatch[2] ? `${annMatch[1]} – ${annMatch[2]}` : annMatch[1],
+              id: h.id,
+            };
+          }
+          return {
+            num: '',
+            title: rawText,
+            id: h.id,
+          };
+        })
     : [];
 
   // Scroll-spy: highlight the TOC anchor for the section currently in view.
@@ -476,10 +480,10 @@ export function LegalPage({ documents }: LegalPageProps) {
                   {t('tocHeading')}
                 </SectionKicker>
                 <ol className="list-dim flex flex-col gap-0.5">
-                  {tocItems.map((item) => {
+                  {tocItems.map((item, idx) => {
                     const active = item.id === activeId;
                     return (
-                      <li key={item.num}>
+                      <li key={`${item.id}-${idx}`}>
                         <a
                           href={`#${item.id}`}
                           aria-current={active ? 'true' : undefined}
@@ -489,13 +493,23 @@ export function LegalPage({ documents }: LegalPageProps) {
                               : 'text-foreground/60 hover:text-foreground border-transparent dark:text-white/55 dark:hover:text-white'
                           }`}
                         >
-                          <span
-                            className={`font-mono text-[11px] tabular-nums transition-colors ${
-                              active ? 'text-accent' : 'text-muted'
-                            }`}
-                          >
-                            {item.num.padStart(2, '0')}
-                          </span>
+                          {item.num ? (
+                            <span
+                              className={`shrink-0 font-mono text-[11px] tabular-nums transition-colors ${
+                                active ? 'text-accent' : 'text-muted'
+                              }`}
+                            >
+                              {item.num.padStart(2, '0')}
+                            </span>
+                          ) : (
+                            <span
+                              className={`shrink-0 font-mono text-[11px] font-bold transition-colors ${
+                                active ? 'text-accent' : 'text-muted'
+                              }`}
+                            >
+                              •
+                            </span>
+                          )}
                           <span className="link-underline">{item.title}</span>
                         </a>
                       </li>

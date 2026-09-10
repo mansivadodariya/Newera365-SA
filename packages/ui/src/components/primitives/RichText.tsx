@@ -177,6 +177,45 @@ function renderNode(node: SlateNode, i: number): ReactNode {
         </figure>
       );
     }
+    case 'table':
+      return (
+        <div key={i} className="border-border/80 my-6 overflow-x-auto rounded-xl border">
+          <table className="w-full border-collapse text-left text-[14px]">{children}</table>
+        </div>
+      );
+    case 'thead':
+      return (
+        <thead
+          key={i}
+          className="border-border bg-surface-elevated text-foreground border-b font-semibold"
+        >
+          {children}
+        </thead>
+      );
+    case 'tbody':
+      return (
+        <tbody key={i} className="divide-border/60 divide-y">
+          {children}
+        </tbody>
+      );
+    case 'tr':
+      return (
+        <tr key={i} className="hover:bg-surface-elevated/40 transition-colors">
+          {children}
+        </tr>
+      );
+    case 'th':
+      return (
+        <th key={i} className="text-foreground px-4 py-3 align-top font-semibold">
+          {children}
+        </th>
+      );
+    case 'td':
+      return (
+        <td key={i} className="text-muted px-4 py-3 align-top">
+          {children}
+        </td>
+      );
     default: {
       const text = extractText(node).trim();
       if (!text) return null;
