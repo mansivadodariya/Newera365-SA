@@ -17,9 +17,9 @@ import 'dotenv/config';
 import { Client } from 'pg';
 
 const PATCH: Record<string, string> = {
-  contact_address_en:
-    'Level 14, Boulevard Plaza Tower 1\nSheikh Mohammed Bin Rashid Boulevard\nDubai, UAE',
-  contact_address_ar: 'الطابق 14، برج بلازا بوليفارد 1\nشارع الشيخ محمد بن راشد\nدبي، الإمارات',
+  // contact_address_en:
+  //   'Level 14, Boulevard Plaza Tower 1\nSheikh Mohammed Bin Rashid Boulevard\nDubai, UAE',
+  // contact_address_ar: 'الطابق 14، برج بلازا بوليفارد 1\nشارع الشيخ محمد بن راشد\nدبي، الإمارات',
   support_hours_en: 'Monday to Friday',
   support_hours_ar: 'الاثنين إلى الجمعة',
 };

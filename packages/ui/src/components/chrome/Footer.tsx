@@ -225,7 +225,7 @@ function Footer({
             )}
             {/* Practical: contact details + payment methods */}
             <div className="flex flex-col gap-6">
-              {(contact?.email || contact?.phone || contact?.address) && (
+              {(contact?.email || contact?.phone) && (
                 <div>
                   <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                     {t('contactHeading')}
@@ -269,12 +269,6 @@ function Footer({
                         >
                           {contact.phone}
                         </a>
-                      </li>
-                    )}
-
-                    {contact?.address && (
-                      <li className="font-body whitespace-pre-line leading-relaxed text-[rgba(255,255,255,0.55)]">
-                        {contact.address}
                       </li>
                     )}
                   </ul>
