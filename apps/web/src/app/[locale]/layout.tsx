@@ -270,7 +270,6 @@ export default async function LocaleLayout({
                 whatsapp={s?.whatsappNumber || '+18677783511'}
                 paymentMethods={[]}
                 regulatoryDisclosure={regulatoryDisclosure}
-                companyRegistration={companyRegistration}
               />
             </ToastProvider>
           </NextIntlClientProvider>

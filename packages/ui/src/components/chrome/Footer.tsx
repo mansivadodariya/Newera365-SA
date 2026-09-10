@@ -208,13 +208,12 @@ function Footer({
             warning always shows. */}
         {/* Optional regulatory & practical info */}
         {(regulatoryDisclosure ||
-          companyRegistration ||
           contact?.email ||
           contact?.phone ||
           contact?.address ||
           (paymentMethods && paymentMethods.length > 0)) && (
           <div className="mb-8 grid gap-x-16 gap-y-8 xl:grid-cols-2">
-            {(regulatoryDisclosure || companyRegistration || t('regBody')) && (
+            {(regulatoryDisclosure || t('regBody')) && (
               <div>
                 <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                   {t('regHeading')}
@@ -222,11 +221,6 @@ function Footer({
                 <p className="font-body mb-3 hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
                   {regulatoryDisclosure || t('regBody')}
                 </p>
-                {companyRegistration && (
-                  <p className="font-body hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.4)]">
-                    {companyRegistration}
-                  </p>
-                )}
               </div>
             )}
             {/* Practical: contact details + payment methods */}
