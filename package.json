@@ -21,7 +21,6 @@
     "d3-geo": "^3.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
-    "next": "^14.2.18",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "topojson-client": "^3.1.0",
@@ -41,6 +40,7 @@
   },
   "packageManager": "npm@10.8.2",
   "dependencies": {
+    "next": "^14.2.18",
     "sharp": "^0.35.3"
   },
   "optionalDependencies": {

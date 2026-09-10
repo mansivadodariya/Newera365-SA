@@ -764,6 +764,90 @@ export async function getInstruments(
 // Account Types (language-neutral — no locale param)
 // ---------------------------------------------------------------------------
 
+export const FALLBACK_ACCOUNT_TYPES: CmsAccountType[] = [
+  {
+    id: 123,
+    name: 'Demo',
+    nameAr: 'تجريبي',
+    badge: 'free',
+    minDeposit: 0,
+    spreadFrom: '1.2',
+    leverage: 'Up to 1:500',
+    platforms: ['mt5', 'web-trader', 'mobile'],
+    commission: '$0',
+    isPopular: false,
+    sortOrder: 1,
+    status: 'active',
+    features: [
+      { value: 'Full platform access' },
+      { value: 'Real-time market data' },
+      { value: 'No deposit required' },
+    ],
+    featuresAr: 'وصول كامل للمنصة\nبيانات السوق الفعلية\nلا يلزم إيداع',
+  },
+  {
+    id: 124,
+    name: 'Standard',
+    nameAr: 'قياسي',
+    badge: 'popular',
+    minDeposit: 50,
+    spreadFrom: '1.2',
+    leverage: 'Up to 1:500',
+    platforms: ['mt5', 'web-trader', 'mobile'],
+    commission: '$0',
+    isPopular: true,
+    sortOrder: 2,
+    status: 'active',
+    features: [
+      { value: 'All 2000+ instruments' },
+      { value: 'Zero commission' },
+      { value: 'Swap-free available on request' },
+    ],
+    featuresAr: 'جميع الأدوات الـ 2000+\nصفر عمولة\nخيار بدون فوائد تبييت عند الطلب',
+  },
+  {
+    id: 125,
+    name: 'Raw',
+    nameAr: 'خام',
+    badge: 'value',
+    minDeposit: 50,
+    spreadFrom: '0.2',
+    leverage: 'Up to 1:500',
+    platforms: ['mt5', 'web-trader', 'mobile'],
+    commission: '$8',
+    isPopular: false,
+    sortOrder: 3,
+    status: 'active',
+    features: [
+      { value: 'Interbank raw pricing' },
+      { value: 'Metals commission $10 per lot' },
+      { value: 'Built for scalpers and EAs' },
+    ],
+    featuresAr:
+      'تسعير خام من البنوك مباشرة\nعمولة المعادن 10 دولار لكل عقد\nمصمم للمضاربة السريعة والأنظمة الآلية',
+  },
+  {
+    id: 126,
+    name: 'Pro',
+    nameAr: 'برو',
+    badge: 'pro',
+    minDeposit: 2500,
+    spreadFrom: '1.8',
+    leverage: 'Up to 1:500',
+    platforms: ['mt5', 'web-trader', 'mobile'],
+    commission: '$0',
+    isPopular: false,
+    sortOrder: 4,
+    status: 'active',
+    features: [
+      { value: 'Zero commission trading' },
+      { value: 'Dedicated account manager' },
+      { value: 'Custom spreads and priority execution' },
+    ],
+    featuresAr: 'تداول بدون عمولة\nمدير حساب مخصص\nفروق مخصصة وتنفيذ ذو أولوية',
+  },
+];
+
 export async function getAccountTypes(locale?: string): Promise<CmsAccountType[]> {
   const data = await fetchCollection<CmsAccountType>(
     'account-types',
@@ -774,6 +858,9 @@ export async function getAccountTypes(locale?: string): Promise<CmsAccountType[]
     },
     locale,
   );
+  if (!data.docs || data.docs.length === 0) {
+    return FALLBACK_ACCOUNT_TYPES;
+  }
   return data.docs;
 }
 
