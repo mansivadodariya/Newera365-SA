@@ -51,12 +51,24 @@ function WhatsAppIcon() {
   );
 }
 
+function MailIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
+      <path d="m2 7 10 7L22 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 /**
  * First-party floating contact launcher — chat-widget presentation (FAB →
  * mini chat card with support header + channel rows) without any third-party
  * script.
  */
-export function FloatingContactWidget({ whatsapp = '+18677783511' }: FloatingContactWidgetProps) {
+export function FloatingContactWidget({
+  email = 'support@newera365sa.com',
+  whatsapp = '+18677783511',
+}: FloatingContactWidgetProps) {
   const t = useTranslations('contactWidget');
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -105,6 +117,7 @@ export function FloatingContactWidget({ whatsapp = '+18677783511' }: FloatingCon
   }, [barOnThisRoute]);
 
   const activeWhatsapp = whatsapp || '+18677783511';
+  const activeEmail = email || 'support@newera365sa.com';
   const waDigits = activeWhatsapp.replace(/[^0-9]/g, '');
 
   const rowClass =
@@ -175,6 +188,16 @@ export function FloatingContactWidget({ whatsapp = '+18677783511' }: FloatingCon
             <p className="font-body relative mt-3.5 block rounded-[12px] border border-white/[0.08] bg-black/40 px-3.5 py-2.5 text-[13px] leading-snug text-white/95">
               {t('welcome')}
             </p>
+            <div className="relative mt-2.5 flex flex-col gap-1.5">
+              <a
+                href={`mailto:${activeEmail}`}
+                className="font-body flex items-center gap-2 rounded-lg px-1 py-0.5 text-[12px] text-white/80 transition-colors hover:text-white"
+                dir="ltr"
+              >
+                <MailIcon />
+                <span>{activeEmail}</span>
+              </a>
+            </div>
           </div>
 
           {/* Channel rows */}
@@ -199,6 +222,26 @@ export function FloatingContactWidget({ whatsapp = '+18677783511' }: FloatingCon
                     dir="ltr"
                   >
                     {activeWhatsapp}
+                  </span>
+                </span>
+              </a>
+            )}
+
+            {/* Email */}
+            {activeEmail && (
+              <a href={`mailto:${activeEmail}`} className={rowClass}>
+                <span className={iconWrap}>
+                  <MailIcon />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="font-body block text-[14px] font-semibold text-[#0F172A] dark:text-white">
+                    {t('email')}
+                  </span>
+                  <span
+                    className="font-body block truncate text-[12px] text-[#64748B] dark:text-[#94a3b8]"
+                    dir="ltr"
+                  >
+                    {activeEmail}
                   </span>
                 </span>
               </a>

@@ -27,22 +27,7 @@ export interface CmsFooterContact {
   hours?: string | null;
 }
 
-// Call + WhatsApp quick-action glyphs shown beside the footer phone number.
-// ponytail: mirror FloatingContactWidget's PhoneIcon/WhatsAppIcon so both
-// surfaces read identically; kept local to avoid a shared export for two SVGs.
-function PhoneIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+// WhatsApp quick-action glyph shown in the footer.
 
 function WhatsAppIcon() {
   return (
@@ -214,44 +199,34 @@ function Footer({
               </div>
             )}
 
-            {/* Contact details */}
-            {contact?.phone && (
-              <div className="mb-8 xl:mb-0">
-                <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-                  {t('contactHeading')}
-                </p>
-                <ul className="flex flex-col gap-2 text-[14px]">
-                  <li className="flex items-center gap-2.5">
-                    <span className="flex items-center gap-2">
-                      <a
-                        href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                        aria-label={t('callAria')}
-                        className="inline-flex text-white/40 transition-colors hover:text-white"
-                      >
-                        <PhoneIcon />
-                      </a>
-                      {waDigits && (
-                        <a
-                          href={`https://wa.me/${waDigits}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={t('whatsappAria')}
-                          className="inline-flex text-white/40 transition-colors hover:text-white"
-                        >
-                          <WhatsAppIcon />
-                        </a>
-                      )}
+            {/* GET IN TOUCH */}
+            <div className="flex flex-col gap-2">
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[1px] text-[rgba(255,255,255,0.4)]">
+                {t('contactHeading')}
+              </p>
+              <div className="flex flex-col gap-1.5 text-[13px]">
+                <a
+                  href="mailto:info@newera365sa.com"
+                  className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                >
+                  info@newera365sa.com
+                </a>
+                {waDigits && (
+                  <a
+                    href={`https://wa.me/${waDigits}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t('whatsappAria')}
+                    className="inline-flex items-center gap-2 text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                  >
+                    <span className="text-white/40">
+                      <WhatsAppIcon />
                     </span>
-                    <a
-                      href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                      className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
-                    >
-                      {contact.phone}
-                    </a>
-                  </li>
-                </ul>
+                    <span dir="ltr">{activeWhatsapp}</span>
+                  </a>
+                )}
               </div>
-            )}
+            </div>
           </div>
 
           {/* Link grid — 2 cols mobile, 4 cols desktop (fills the row) */}
@@ -286,20 +261,18 @@ function Footer({
           <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
             {t('riskDisclosure')}
           </p>
-          <p className="font-body w-full hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[170%] text-[rgba(255,255,255,0.45)]">
-            {riskDisclaimer ?? t('riskWarning')}
-          </p>
+          <div className="font-body w-full hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[170%] text-[rgba(255,255,255,0.45)]">
+            {t('riskWarning')}
+          </div>
         </div>
 
         {/* Full-width Regulatory & Legal Information */}
-        {(regulatoryDisclosure || t('regBody')) && (
-          <div className="mb-8 w-full">
-            <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-              {t('regHeading')}
-            </p>
-            {renderRegulatoryContent(regulatoryDisclosure || t('regBody'))}
-          </div>
-        )}
+        <div className="mb-8 w-full">
+          <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+            {t('regHeading')}
+          </p>
+          <div>{renderRegulatoryContent(t('regBody'))}</div>
+        </div>
 
         {paymentMethods && paymentMethods.length > 0 && (
           <div className="mb-8 w-full">
