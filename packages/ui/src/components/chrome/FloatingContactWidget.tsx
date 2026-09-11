@@ -51,39 +51,12 @@ function WhatsAppIcon() {
   );
 }
 
-function PhoneIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function MailIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
-      <path d="m2 7 10 7L22 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 /**
  * First-party floating contact launcher — chat-widget presentation (FAB →
  * mini chat card with support header + channel rows) without any third-party
  * script.
  */
-export function FloatingContactWidget({
-  email = 'info@newera365.com',
-  phone = '+44 2070970860',
-  whatsapp = '+18677783511',
-}: FloatingContactWidgetProps) {
+export function FloatingContactWidget({ whatsapp = '+18677783511' }: FloatingContactWidgetProps) {
   const t = useTranslations('contactWidget');
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -132,8 +105,6 @@ export function FloatingContactWidget({
   }, [barOnThisRoute]);
 
   const activeWhatsapp = whatsapp || '+18677783511';
-  const activeEmail = email || 'info@newera365.com';
-  const activePhone = phone || '+44 2070970860';
   const waDigits = activeWhatsapp.replace(/[^0-9]/g, '');
 
   const rowClass =
@@ -204,24 +175,6 @@ export function FloatingContactWidget({
             <p className="font-body relative mt-3.5 block rounded-[12px] border border-white/[0.08] bg-black/40 px-3.5 py-2.5 text-[13px] leading-snug text-white/95">
               {t('welcome')}
             </p>
-            <div className="relative mt-2.5 flex flex-col gap-1.5">
-              <a
-                href={`tel:${activePhone.replace(/\s+/g, '')}`}
-                className="font-body flex items-center gap-2 rounded-lg px-1 py-0.5 text-[12px] text-white/80 transition-colors hover:text-white"
-                dir="ltr"
-              >
-                <PhoneIcon />
-                <span>{activePhone}</span>
-              </a>
-              <a
-                href={`mailto:${activeEmail}`}
-                className="font-body flex items-center gap-2 rounded-lg px-1 py-0.5 text-[12px] text-white/80 transition-colors hover:text-white"
-                dir="ltr"
-              >
-                <MailIcon />
-                <span>{activeEmail}</span>
-              </a>
-            </div>
           </div>
 
           {/* Channel rows */}
@@ -246,46 +199,6 @@ export function FloatingContactWidget({
                     dir="ltr"
                   >
                     {activeWhatsapp}
-                  </span>
-                </span>
-              </a>
-            )}
-
-            {/* Phone Call */}
-            {activePhone && (
-              <a href={`tel:${activePhone.replace(/\s+/g, '')}`} className={rowClass}>
-                <span className={iconWrap}>
-                  <PhoneIcon />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="font-body block text-[14px] font-semibold text-[#0F172A] dark:text-white">
-                    {t('phone')}
-                  </span>
-                  <span
-                    className="font-body block truncate text-[12px] text-[#64748B] dark:text-[#94a3b8]"
-                    dir="ltr"
-                  >
-                    {activePhone}
-                  </span>
-                </span>
-              </a>
-            )}
-
-            {/* Email */}
-            {activeEmail && (
-              <a href={`mailto:${activeEmail}`} className={rowClass}>
-                <span className={iconWrap}>
-                  <MailIcon />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="font-body block text-[14px] font-semibold text-[#0F172A] dark:text-white">
-                    {t('email')}
-                  </span>
-                  <span
-                    className="font-body block truncate text-[12px] text-[#64748B] dark:text-[#94a3b8]"
-                    dir="ltr"
-                  >
-                    {activeEmail}
                   </span>
                 </span>
               </a>

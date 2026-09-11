@@ -52,6 +52,48 @@ function WhatsAppIcon() {
   );
 }
 
+function renderRegulatoryContent(content: string) {
+  const blocks = content
+    .split(/\r?\n\s*\r?\n/)
+    .map((b) => b.trim())
+    .filter(Boolean);
+
+  const isHeading = (text: string) => {
+    if (/^#{1,4}\s+/.test(text)) return true;
+    const lower = text.toLowerCase();
+    return (
+      (lower.includes('south africa') && lower.length < 80) ||
+      (lower.includes('saint lucia') && lower.length < 80) ||
+      lower === 'regional restrictions' ||
+      text === 'القيود الإقليمية' ||
+      (text.includes('جنوب أفريقيا') && text.length < 80) ||
+      (text.includes('سانت لوسيا') && text.length < 80)
+    );
+  };
+
+  return blocks.map((block, idx) => {
+    if (isHeading(block)) {
+      const headingText = block.replace(/^#{1,4}\s+/, '');
+      return (
+        <p
+          key={idx}
+          className={`${idx === 0 ? 'mt-0' : 'mt-6'} mb-2 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]`}
+        >
+          {headingText}
+        </p>
+      );
+    }
+    return (
+      <p
+        key={idx}
+        className="font-body mb-3 w-full hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]"
+      >
+        {block}
+      </p>
+    );
+  });
+}
+
 function Footer({
   riskDisclaimer,
   socialLinks,
@@ -173,52 +215,40 @@ function Footer({
             )}
 
             {/* Contact details */}
-            {(contact?.email || contact?.phone) && (
+            {contact?.phone && (
               <div className="mb-8 xl:mb-0">
                 <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                   {t('contactHeading')}
                 </p>
                 <ul className="flex flex-col gap-2 text-[14px]">
-                  {contact?.email && (
-                    <li>
-                      <a
-                        href={`mailto:${contact.email}`}
-                        className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
-                      >
-                        {contact.email}
-                      </a>
-                    </li>
-                  )}
-                  {contact?.phone && (
-                    <li className="flex items-center gap-2.5">
-                      <span className="flex items-center gap-2">
-                        <a
-                          href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                          aria-label={t('callAria')}
-                          className="inline-flex text-white/40 transition-colors hover:text-white/80"
-                        >
-                          <PhoneIcon />
-                        </a>
-                        {waDigits && (
-                          <a
-                            href={`https://wa.me/${waDigits}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={t('whatsappAria')}
-                            className="inline-flex text-white/40 transition-colors hover:text-white/80"
-                          >
-                            <WhatsAppIcon />
-                          </a>
-                        )}
-                      </span>
+                  <li className="flex items-center gap-2.5">
+                    <span className="flex items-center gap-2">
                       <a
                         href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                        className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                        aria-label={t('callAria')}
+                        className="inline-flex text-white/40 transition-colors hover:text-white"
                       >
-                        {contact.phone}
+                        <PhoneIcon />
                       </a>
-                    </li>
-                  )}
+                      {waDigits && (
+                        <a
+                          href={`https://wa.me/${waDigits}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={t('whatsappAria')}
+                          className="inline-flex text-white/40 transition-colors hover:text-white"
+                        >
+                          <WhatsAppIcon />
+                        </a>
+                      )}
+                    </span>
+                    <a
+                      href={`tel:${contact.phone.replace(/\s+/g, '')}`}
+                      className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                    >
+                      {contact.phone}
+                    </a>
+                  </li>
                 </ul>
               </div>
             )}
@@ -251,15 +281,23 @@ function Footer({
         {/* Thin divider — full width on desktop */}
         <div className="mb-8 h-px w-full bg-[rgba(255,255,255,0.08)]" />
 
-        {/* Full-width Authorisation & Regulation section */}
+        {/* Full-width High Risk Investment Warning */}
+        <div className="mb-8 w-full">
+          <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+            {t('riskDisclosure')}
+          </p>
+          <p className="font-body w-full hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[170%] text-[rgba(255,255,255,0.45)]">
+            {riskDisclaimer ?? t('riskWarning')}
+          </p>
+        </div>
+
+        {/* Full-width Regulatory & Legal Information */}
         {(regulatoryDisclosure || t('regBody')) && (
           <div className="mb-8 w-full">
             <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
               {t('regHeading')}
             </p>
-            <p className="font-body w-full hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
-              {regulatoryDisclosure || t('regBody')}
-            </p>
+            {renderRegulatoryContent(regulatoryDisclosure || t('regBody'))}
           </div>
         )}
 
@@ -280,16 +318,6 @@ function Footer({
             </div>
           </div>
         )}
-
-        {/* Full-width Risk Disclosure section */}
-        <div className="w-full">
-          <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-            {t('riskDisclosure')}
-          </p>
-          <p className="font-body w-full hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[170%] text-[rgba(255,255,255,0.45)]">
-            {riskDisclaimer ?? t('riskWarning')}
-          </p>
-        </div>
 
         {/* Copyright row */}
         <div className="mt-6 border-t border-[rgba(255,255,255,0.08)] pt-5">
