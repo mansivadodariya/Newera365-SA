@@ -116,7 +116,7 @@ function Footer({
 }) {
   const locale = useLocale();
   const t = useTranslations('footer');
-  const activeEmail = 'info@newera365.com';
+  const activeEmail = 'info@newera365sa.com';
   const activePhone = '+44 2070970860';
   const phoneDigits = activePhone.replace(/[^0-9+]/g, '');
 
