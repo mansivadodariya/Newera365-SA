@@ -59,15 +59,15 @@ const jetbrainsMono = JetBrains_Mono({
 
 const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
 
-const rawBase = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000')
-  .trim()
-  .replace(/\/+$/, '');
+const defaultUrl =
+  process.env.NODE_ENV === 'production' ? 'https://newera365.com' : 'http://localhost:3000';
+const rawBase = (process.env.NEXT_PUBLIC_SITE_URL ?? defaultUrl).trim().replace(/\/+$/, '');
 
 const BASE = rawBase
   ? rawBase.startsWith('http://') || rawBase.startsWith('https://')
     ? rawBase
     : `https://${rawBase}`
-  : 'http://localhost:3000';
+  : defaultUrl;
 
 function getMetadataBase(urlStr: string): URL {
   try {
@@ -227,7 +227,7 @@ export default async function LocaleLayout({
                 '@context': 'https://schema.org',
                 '@type': 'WebSite',
                 name: isAr ? 'نيو إيرا' : 'Newera',
-                alternateName: ['Newera', 'Newera', 'Newera Capital Markets'],
+                alternateName: ['Newera365', 'Newera 365', 'Newera Capital Markets'],
                 url: BASE,
               },
               {
