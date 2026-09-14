@@ -190,12 +190,17 @@ export default async function LocaleLayout({
   const isAr = locale === 'ar';
   const contact = s
     ? {
-        email: s.contactEmail ?? null,
-        phone: s.contactPhone ?? null,
+        email: s.contactEmail ?? 'info@newera365.com',
+        phone: s.contactPhone ?? '+44 2070970860',
         address: (isAr ? s.contactAddressAr : s.contactAddressEn) ?? null,
         hours: null,
       }
-    : undefined;
+    : {
+        email: 'info@newera365.com',
+        phone: '+44 2070970860',
+        address: null,
+        hours: null,
+      };
   const regulatoryDisclosure = s
     ? ((isAr ? s.regulatoryDisclosureAr : s.regulatoryDisclosureEn) ?? undefined)
     : undefined;
@@ -269,7 +274,7 @@ export default async function LocaleLayout({
                   route transitions. */}
               <StickyCtaBar />
               <FloatingContactWidget
-                email="support@newera365sa.com"
+                email={s?.contactEmail || 'support@newera365.com'}
                 whatsapp={s?.whatsappNumber || '+18677783511'}
               />
               <Footer
