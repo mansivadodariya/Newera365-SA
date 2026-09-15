@@ -59,8 +59,10 @@ const jetbrainsMono = JetBrains_Mono({
 
 const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
 
+const CANONICAL_SITE_URL = 'https://newera365.com';
+
 const defaultUrl =
-  process.env.NODE_ENV === 'production' ? 'https://newera365.com' : 'http://localhost:3000';
+  process.env.NODE_ENV === 'production' ? CANONICAL_SITE_URL : 'http://localhost:3000';
 const rawBase = (process.env.NEXT_PUBLIC_SITE_URL ?? defaultUrl).trim().replace(/\/+$/, '');
 
 const BASE = rawBase
@@ -73,7 +75,7 @@ function getMetadataBase(urlStr: string): URL {
   try {
     return new URL(urlStr);
   } catch {
-    return new URL('http://localhost:3000');
+    return new URL(CANONICAL_SITE_URL);
   }
 }
 
@@ -91,7 +93,7 @@ export async function generateMetadata({
     title: {
       default: isAr
         ? 'نيو إيرا: تداول الفوركس والعقود مقابل الفروقات'
-        : 'Newera: Forex & CFD Trading',
+        : 'Newera | Forex & CFD Trading',
       template: isAr ? '%s | نيو إيرا' : '%s | Newera',
     },
     description: isAr
@@ -108,6 +110,7 @@ export async function generateMetadata({
     openGraph: {
       siteName: 'Newera',
       type: 'website',
+      url: `${BASE}/${locale}`,
       locale: locale === 'ar' ? 'ar_AE' : 'en_US',
       alternateLocale: locale === 'ar' ? ['en_US'] : ['ar_AE'],
       images: [
@@ -126,7 +129,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: isAr
         ? 'نيو إيرا: تداول الفوركس والعقود مقابل الفروقات'
-        : 'Newera: Forex & CFD Trading',
+        : 'Newera | Forex & CFD Trading',
       description: isAr
         ? 'تداول الفوركس والمؤشرات والسلع والعملات الرقمية مع نيو إيرا.'
         : 'Trade forex, indices, commodities and crypto CFDs with Newera.',
@@ -231,16 +234,36 @@ export default async function LocaleLayout({
               {
                 '@context': 'https://schema.org',
                 '@type': 'WebSite',
-                name: isAr ? 'نيو إيرا' : 'Newera',
-                alternateName: ['Newera365', 'Newera 365', 'Newera Capital Markets'],
-                url: BASE,
+                name: 'Newera',
+                alternateName: [
+                  'Newera 365',
+                  'Newera365',
+                  'Newera Capital Markets',
+                  'Newera 365 SA',
+                  'نيو إيرا',
+                  'نيو إيرا 365',
+                ],
+                url: `${CANONICAL_SITE_URL}/`,
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: 'Newera Capital Markets',
+                alternateName: ['Newera', 'Newera 365', 'Newera365'],
+                url: `${CANONICAL_SITE_URL}/`,
+                logo: `${CANONICAL_SITE_URL}/favicon-dark.png`,
+                sameAs: [
+                  'https://x.com/newera365',
+                  'https://linkedin.com/company/newera365',
+                  'https://instagram.com/newera365',
+                ],
               },
               {
                 '@context': 'https://schema.org',
                 '@type': 'FinancialService',
                 name: 'Newera',
-                url: BASE,
-                logo: `${BASE}/favicon-dark.png`,
+                url: `${CANONICAL_SITE_URL}/`,
+                logo: `${CANONICAL_SITE_URL}/favicon-dark.png`,
                 description:
                   'Forex and CFD broker offering tight spreads, fast MT5 execution, and multilingual support.',
                 sameAs: [

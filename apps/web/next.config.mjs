@@ -41,6 +41,7 @@ if (cmsUrl) {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
   reactStrictMode: true,
   transpilePackages: ['@newera365/ui', '@newera365/types'],
   experimental: {
@@ -54,6 +55,37 @@ const nextConfig = {
   // 'always', so only the /en and /ar prefixed forms exist.
   async redirects() {
     return [
+      // Legacy paths from old indexing (e.g. /about, /contact)
+      {
+        source: '/:locale(en|ar)/about',
+        destination: '/:locale/company/about',
+        permanent: true,
+      },
+      {
+        source: '/about',
+        destination: '/en/company/about',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|ar)/about-us',
+        destination: '/:locale/company/about',
+        permanent: true,
+      },
+      {
+        source: '/about-us',
+        destination: '/en/company/about',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|ar)/contact-us',
+        destination: '/:locale/support',
+        permanent: true,
+      },
+      {
+        source: '/contact-us',
+        destination: '/en/support',
+        permanent: true,
+      },
       {
         source: '/:locale(en|ar)/platform/mobile',
         destination: '/:locale/platform/mt5',
