@@ -44,10 +44,6 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   transpilePackages: ['@newera365/ui', '@newera365/types'],
-  experimental: {
-    workerThreads: false,
-    cpus: 1,
-  },
   // /platform/mobile was a duplicate of /platform/mt5 (same PlatformPage) and has
   // been removed. Redirect it to the canonical page: this also guarantees the old
   // path never serves a stale prerendered copy (Vercel does not purge the CDN entry
@@ -87,6 +83,16 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/:locale(en|ar)/contact',
+        destination: '/:locale/support',
+        permanent: true,
+      },
+      {
+        source: '/contact',
+        destination: '/en/support',
+        permanent: true,
+      },
+      {
         source: '/:locale(en|ar)/platform/mobile',
         destination: '/:locale/platform/mt5',
         permanent: true,
@@ -96,6 +102,17 @@ const nextConfig = {
       {
         source: '/:locale(en|ar)/tools/ai-crm',
         destination: '/:locale/ai-crm',
+        permanent: true,
+      },
+      // /markets/crypto redirect to /markets/forex
+      {
+        source: '/:locale(en|ar)/markets/crypto',
+        destination: '/:locale/markets/forex',
+        permanent: true,
+      },
+      {
+        source: '/markets/crypto',
+        destination: '/en/markets/forex',
         permanent: true,
       },
       // /markets/instruments was the standalone full-spec table; its route was removed

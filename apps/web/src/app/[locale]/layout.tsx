@@ -191,19 +191,13 @@ export default async function LocaleLayout({
 
   // Footer contact, regulatory & payment data — all CMS-driven (client feedback #6)
   const isAr = locale === 'ar';
-  const contact = s
-    ? {
-        email: s.contactEmail ?? 'info@newera365sa.com',
-        phone: s.contactPhone ?? '+44 2070970860',
-        address: (isAr ? s.contactAddressAr : s.contactAddressEn) ?? null,
-        hours: null,
-      }
-    : {
-        email: 'info@newera365sa.com',
-        phone: '+44 2070970860',
-        address: null,
-        hours: null,
-      };
+  const saAddress = '1 Edgemere Road, Elfindale, Cape Town, Western Cape, 7945, South Africa';
+  const contact = {
+    email: s?.contactEmail ?? 'info@newera365sa.com',
+    phone: s?.contactPhone ?? '+44 2070970860',
+    address: (isAr ? s?.contactAddressAr : s?.contactAddressEn) || saAddress,
+    hours: null,
+  };
   const regulatoryDisclosure = s
     ? ((isAr ? s.regulatoryDisclosureAr : s.regulatoryDisclosureEn) ?? undefined)
     : undefined;
@@ -252,6 +246,14 @@ export default async function LocaleLayout({
                 alternateName: ['Newera', 'Newera 365', 'Newera365'],
                 url: `${CANONICAL_SITE_URL}/`,
                 logo: `${CANONICAL_SITE_URL}/favicon-dark.png`,
+                address: {
+                  '@type': 'PostalAddress',
+                  streetAddress: '1 Edgemere Road, Elfindale',
+                  addressLocality: 'Cape Town',
+                  addressRegion: 'Western Cape',
+                  postalCode: '7945',
+                  addressCountry: 'ZA',
+                },
                 sameAs: [
                   'https://x.com/newera365',
                   'https://linkedin.com/company/newera365',
@@ -266,6 +268,14 @@ export default async function LocaleLayout({
                 logo: `${CANONICAL_SITE_URL}/favicon-dark.png`,
                 description:
                   'Forex and CFD broker offering tight spreads, fast MT5 execution, and multilingual support.',
+                address: {
+                  '@type': 'PostalAddress',
+                  streetAddress: '1 Edgemere Road, Elfindale',
+                  addressLocality: 'Cape Town',
+                  addressRegion: 'Western Cape',
+                  postalCode: '7945',
+                  addressCountry: 'ZA',
+                },
                 sameAs: [
                   'https://x.com/newera365',
                   'https://linkedin.com/company/newera365',
